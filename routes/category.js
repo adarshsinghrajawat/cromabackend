@@ -4,16 +4,38 @@ var pool = require("./pool")
 var upload = require("./multer");
 /* GET home page. */
 router.post('/submit_category', upload.single("image"), function (req, res, next) {
+    console.log(req.body);
+    console.log(req.file);
+
+    try {
+        pool.query(
+            "INSERT INTO category (categoryname, image) VALUES (?, ?)",
+            [req.body.categoryname, req.file.filename], // Store signature as Base64 string
+            function (error, result) {
+                if (error) {
+                    console.log(error);
+                    return res.status(500).json({ status: false, message: "Database Error, Plz Contact Database Admin" });
+                } else {
+                    return res.status(200).json({ status: true, message: "Category Submitted Successfully!" });
+                }
+            }
+        );
+    } catch (e) {
+        return res.status(500).json({ status: false, message: "Server Error...!" });
+    }
+});
+
+router.post('/submit_employee', upload.single("image"), function (req, res, next) {
     console.log(req.body)
     console.log(req.file)
     try {
-        pool.query("insert into category (categoryname, image) values(?,?)", [req.body.categoryname, req.file.filename], function (error, result) {
+        pool.query("insert into employee (employeename, image) values(?,?)", [req.body.employeename, req.file.filename], function (error, result) {
             if (error) {
                 console.log(error)
                return res.status(500).json({ status: false, message: "DataBase Error, Plz Contact DataBase Admin" })
             }
             else {
-               return res.status(200).json({ status: true, message: "Category Submitted Successfully!" })
+               return res.status(200).json({ status: true, message: "Employee Added Successfully!" })
             }
         })
     }

@@ -15,6 +15,8 @@ var bannerRouter=require("./routes/banner");
 var adminRouter=require("./routes/admins");
 var userInterfaceRouter=require("./routes/userinterface");
 var userAccountRouter=require("./routes/useraccount");
+// var pdfRouter = require('./routes/pdf');
+
 
 var app = express();
 // view engine setup
@@ -25,6 +27,8 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use("/pdfs", express.static(path.join(__dirname, "pdfs")));
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -37,6 +41,9 @@ app.use("/banner", bannerRouter);
 app.use("/admins", adminRouter);
 app.use("/userinterface", userInterfaceRouter);
 app.use("/useraccount", userAccountRouter);
+// app.use("/pdf", pdfRouter);
+
+
 // catch 404 and forward to error andler
 app.use(function(req, res, next) {
   next(createError(404));
